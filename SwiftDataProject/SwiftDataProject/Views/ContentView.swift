@@ -18,7 +18,7 @@ struct ContentView: View {
             PersonView(seachString: searchText, sorderOrder: sortOrder)
                 .navigationTitle("List of users")
                 .navigationDestination(for: Person.self) { person in
-                    Text("\(person.name)")
+                    EditPersonView(person: person)
                 }
                 .toolbar {
                     Menu("Sort", systemImage: "arrow.up.arrow.down") {
@@ -29,13 +29,16 @@ struct ContentView: View {
                             Text("Name (Z-A)")
                                 .tag([SortDescriptor(\Person.name, order: .reverse)])
                         }
-                        Button("Add Person", systemImage: "plus", action: addNewPerson)
                     }
+                    Button("Add Person", systemImage: "plus", action: addNewPerson)
                 }
+                .searchable(text: $searchText, prompt: "Search by name")
         }
     }
     func addNewPerson() {
-        
+        let person = Person(name: "", email: "", details: "")
+        modelContext.insert(person)
+        path.append(person)
     }
 }
 
